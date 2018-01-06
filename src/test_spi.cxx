@@ -17,10 +17,10 @@ int main(int, char**) {
 		bdm::device::spi::spidev dev(bdm::unique_fd::open("/dev/spidev0.0", O_RDWR), conf);
 		bdm::device::bdm3004 ad_conv(dev);
 		for (int i = 0;i < 1024;++i) {
-			std::cout << std::hex << ad_conv.read_as_byte(0) << '\t'
-					  << std::hex << ad_conv.read_as_byte(1) << '\t'
-					  << std::hex << ad_conv.read_as_byte(2) << '\t'
-					  << std::hex << ad_conv.read_as_byte(3) << std::endl;
+			std::cout << std::hex << static_cast<std::uint32_t>(ad_conv.read_as_byte(0)) << '\t'
+					  << std::hex << static_cast<std::uint32_t>(ad_conv.read_as_byte(1)) << '\t'
+					  << std::hex << static_cast<std::uint32_t>(ad_conv.read_as_byte(2)) << '\t'
+					  << std::hex << static_cast<std::uint32_t>(ad_conv.read_as_byte(3)) << '\t';
 		}
 	} catch (boost::exception& ex) {
 		LOG(ERROR) << "uncaught exception";
