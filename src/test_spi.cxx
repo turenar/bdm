@@ -20,7 +20,7 @@ int main(int, char**) {
 			std::cout << std::hex << static_cast<std::uint32_t>(ad_conv.read_as_byte(0)) << '\t'
 					  << std::hex << static_cast<std::uint32_t>(ad_conv.read_as_byte(1)) << '\t'
 					  << std::hex << static_cast<std::uint32_t>(ad_conv.read_as_byte(2)) << '\t'
-					  << std::hex << static_cast<std::uint32_t>(ad_conv.read_as_byte(3)) << '\t';
+					  << std::hex << static_cast<std::uint32_t>(ad_conv.read_as_byte(3)) << std::endl;
 		}
 	} catch (boost::exception& ex) {
 		LOG(ERROR) << "uncaught exception";
