@@ -1,0 +1,5 @@
+#pragma once
+
+namespace bdm {
+	const char* const VERSION = "@VCS_TAG@";
+}
