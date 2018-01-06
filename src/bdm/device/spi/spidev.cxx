@@ -24,7 +24,7 @@ namespace bdm::device::spi {
 		check_ioctl(_fd, SPI_IOC_WR_MAX_SPEED_HZ, &c.max_speed);
 	}
 
-	void spidev::transfer(std::uint32_t size, const std::uint8_t* rx, std::uint8_t* tx) {
+	void spidev::transfer(std::uint32_t size, const std::uint8_t* tx, std::uint8_t* rx) {
 		spi_ioc_transfer tr = {};
 		tr.tx_buf = reinterpret_cast<std::uint64_t>(tx);
 		tr.rx_buf = reinterpret_cast<std::uint64_t>(rx);

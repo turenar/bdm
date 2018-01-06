@@ -8,9 +8,9 @@ namespace bdm::device {
 
 	std::uint16_t bdm3004::read(std::uint8_t channel) {
 		assert(channel < 4);
-		std::uint8_t rx[/*packet_size*/] = {0x01, compose_channel(channel), 0x00};
-		std::uint8_t tx[packet_size];
-		_dev.transfer(rx, tx);
+		const std::uint8_t tx[/*packet_size*/] = {0x01, compose_channel(channel), 0x00};
+		std::uint8_t rx[packet_size];
+		_dev.transfer(tx, rx);
 		return static_cast<uint16_t>(((tx[1] & 0x03) << 8) | tx[2]);
 	}
 

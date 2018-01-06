@@ -9,11 +9,11 @@ namespace bdm::device::spi {
 	public:
 		spidev(unique_fd&& device_fd, const config&);
 
-		void transfer(std::uint32_t size, const std::uint8_t* rx, std::uint8_t* tx);
+		void transfer(std::uint32_t size, const std::uint8_t* tx, std::uint8_t* rx);
 
 		template<std::size_t Size>
-		void transfer(const std::uint8_t(& rx)[Size], std::uint8_t(& tx)[Size]) {
-			transfer(static_cast<uint32_t>(Size), rx, tx);
+		void transfer(const std::uint8_t(& tx)[Size], std::uint8_t(& rx)[Size]) {
+			transfer(static_cast<uint32_t>(Size), tx, rx);
 		}
 
 	protected:
