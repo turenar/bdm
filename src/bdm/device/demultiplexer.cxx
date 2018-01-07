@@ -2,7 +2,8 @@
 #include <cassert>
 
 namespace bdm::device {
-	demultiplexer::demultiplexer(gpio::gpio_wrapper& wrapper, int enabler, const int (& selector)[3]) : _gpio(wrapper) {
+	demultiplexer::demultiplexer(gpio::gpio_wrapper& wrapper, std::uint8_t enabler, const std::uint8_t (& selector)[3])
+			: _gpio(wrapper) {
 		_enabler_pin = static_cast<uint8_t>(enabler);
 		_gpio.set_pin_mode(enabler, gpio::io_mode::output);
 		for (int i = 0; i < 3; ++i) {
@@ -12,10 +13,10 @@ namespace bdm::device {
 		enable();
 	}
 
-	void demultiplexer::select(int number) {
+	void demultiplexer::select(std::uint8_t number) {
 		assert(number >= 0 && number < 8);
 		for (int i = 0; i < 3; ++i) {
-			_gpio.write(_selector_pin[i], 1 == (number & (1 << i)));
+			_gpio.write(_selector_pin[i], 0 != (number & (1 << i)));
 		}
 	}
 

@@ -6,9 +6,9 @@
 namespace bdm::device {
 	class demultiplexer {
 	public:
-		demultiplexer(gpio::gpio_wrapper&, int enabler, const int (& selector)[3]);
+		demultiplexer(gpio::gpio_wrapper&, std::uint8_t enabler, const std::uint8_t (& selector)[3]);
 
-		void select(int number);
+		void select(std::uint8_t number);
 		void disable();
 		void enable();
 		void enable(bool enabled);
