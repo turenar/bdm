@@ -1,0 +1,4 @@
+[wrap-git]
+directory = wiringpi
+url = https://github.com/turenar/wiringPi.git
+revision = head

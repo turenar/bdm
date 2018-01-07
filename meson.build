@@ -45,6 +45,7 @@ g3logger_dep = dependency('g3logger',
     fallback: ['g3log', 'g3logger_dep'],
     default_options: ['dynamic_logging=true']
 )
+wiringpi_dep = dependency('wiringpi', fallback: ['wiringpi', 'wiringpi_dep'])
 
 conf = configuration_data()
 
