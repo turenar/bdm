@@ -14,7 +14,7 @@ namespace bdm::device {
 	}
 
 	void demultiplexer::select(std::uint8_t number) {
-		assert(number >= 0 && number < 8);
+		assert(number < 8);
 		for (int i = 0; i < 3; ++i) {
 			_gpio.write(_selector_pin[i], 0 != (number & (1 << i)));
 		}
