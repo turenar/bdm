@@ -9,25 +9,38 @@ libbdm_files = [
 
 vcs_rev = vcs_tag(input: 'version.hxx.in', output: 'version.hxx',
 	fallback: meson.project_version())
+inc = include_directories(['.'])
 
 libbdm = library('bdm', [libbdm_files, vcs_rev],
 	dependencies: [boost_dep, g3logger_dep, wiringpi_dep],
-	include_directories: include_directories(['.']),
+	include_directories: inc,
 	cpp_args: project_warnings,
 	cpp_pch: 'pch/stdafx.h')
 
 libbdm_dep = declare_dependency(
-	sources: vcs_rev,
 	link_with: libbdm,
 	dependencies: [boost_dep, g3logger_dep],
-	include_directories: include_directories(['.']))
+	include_directories: inc)
 
-main_src = [
+libbdmbin_files = [
 	'bdmbin/logger.cxx',
 ]
-executable('test_spi', ['test_spi.cxx', main_src],
+libbdmbin = library('bdmbin', libbdmbin_files,
+	sources: vcs_rev,
 	dependencies: [libbdm_dep],
+	include_directories: inc)
+libbdmbin_dep = declare_dependency(
+	link_with: libbdmbin,
+	dependencies: [libbdm_dep],
+	cpp_args: project_warnings,
+	include_directories: inc)
+
+executable('test_spi', 'test_spi.cxx',
+	dependencies: [libbdm_dep, libbdmbin_dep],
 	cpp_args: project_warnings)
-executable('test_gpio', ['test_gpio.cxx', main_src],
-	dependencies: [libbdm_dep],
+executable('test_gpio', 'test_gpio.cxx',
+	dependencies: [libbdm_dep, libbdmbin_dep],
+	cpp_args: project_warnings)
+executable('test_demux', 'test_gpio.cxx',
+	dependencies: [libbdm_dep, libbdmbin_dep],
 	cpp_args: project_warnings)
