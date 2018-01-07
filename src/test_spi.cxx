@@ -1,9 +1,9 @@
 #include <iostream>
 #include <boost/exception/diagnostic_information.hpp>
 #include <g3log/logworker.hpp>
-#include "bdmbin/logger.hxx"
-#include "bdm/device/spi/spidev.hxx"
 #include "bdm/device/mcp3004.hxx"
+#include "bdm/device/spi/spidev.hxx"
+#include "bdmbin/logger.hxx"
 
 int main(int, char**) {
 	bdmbin::logger logger;

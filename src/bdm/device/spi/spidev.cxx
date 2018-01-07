@@ -1,8 +1,8 @@
 #include "bdm/device/spi/spidev.hxx"
-#include "bdm/logger/logger.hxx"
-#include "bdm/exception/bdm_system_exception.hxx"
 #include <linux/spi/spidev.h>
 #include <sys/ioctl.h>
+#include "bdm/exception/bdm_system_exception.hxx"
+#include "bdm/logger/logger.hxx"
 
 namespace bdm::device::spi {
 	namespace {
