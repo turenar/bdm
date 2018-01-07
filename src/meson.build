@@ -25,5 +25,5 @@ main_src = [
 	'bdmbin/logger.cxx',
 ]
 executable('test_spi', ['test_spi.cxx', main_src],
-	dependencies: [libbdm_dep],
+	dependencies: [libbdm_dep, wiringpi_dep],
 	cpp_args: project_warnings)
