@@ -12,7 +12,8 @@ vcs_rev = vcs_tag(input: 'version.hxx.in', output: 'version.hxx',
 libbdm = library('bdm', [libbdm_files, vcs_rev],
 	dependencies: [boost_dep, g3logger_dep],
 	include_directories: include_directories(['.']),
-	cpp_args: project_warnings)
+	cpp_args: project_warnings,
+	cpp_pch: 'pch/stdafx.h')
 
 libbdm_dep = declare_dependency(
 	sources: vcs_rev,
