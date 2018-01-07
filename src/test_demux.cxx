@@ -3,6 +3,7 @@
 #include <boost/exception/diagnostic_information.hpp>
 #include <g3log/logworker.hpp>
 #include "bdm/device/gpio/gpio_wrapper.hxx"
+#include "bdm/device/demultiplexer.hxx"
 #include "bdmbin/logger.hxx"
 
 int main(int, char**) {
@@ -10,15 +11,14 @@ int main(int, char**) {
 	logger.install_logger();
 	try {
 		bdm::device::gpio::gpio_wrapper g;
-		g.set_pin_mode(17, bdm::device::gpio::io_mode::output);
-		g.set_pin_mode(21, bdm::device::gpio::io_mode::output);
-		g.set_pin_mode(22, bdm::device::gpio::io_mode::output);
+		bdm::device::demultiplexer demux(g, 23, {17, 21, 22});
 		while (true) {
-			g.write(17, true);
-			g.write(21, false);
-			g.write(22, true);
+			demux.enable();
+			demux.select(5);
 			std::this_thread::sleep_for(std::chrono::seconds(1));
-			g.write(22, false);
+			demux.select(1);
+			std::this_thread::sleep_for(std::chrono::seconds(1));
+			demux.disable();
 			std::this_thread::sleep_for(std::chrono::seconds(1));
 		}
 	} catch (boost::exception& ex) {
