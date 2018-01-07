@@ -1,7 +1,7 @@
 #include "bdm/device/gpio/gpio_wrapper.hxx"
 #include <wiringPi.h>
-#include "bdm/logger/logger.hxx"
 #include "bdm/exception/bdm_exception.hxx"
+#include "bdm/logger/logger.hxx"
 
 namespace bdm::device::gpio {
 	gpio_wrapper::gpio_wrapper() {

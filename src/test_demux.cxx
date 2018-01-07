@@ -2,8 +2,8 @@
 #include <iostream>
 #include <boost/exception/diagnostic_information.hpp>
 #include <g3log/logworker.hpp>
-#include "bdm/device/gpio/gpio_wrapper.hxx"
 #include "bdm/device/demultiplexer.hxx"
+#include "bdm/device/gpio/gpio_wrapper.hxx"
 #include "bdmbin/logger.hxx"
 
 int main(int, char**) {
