@@ -7,9 +7,9 @@ namespace bdm::device {
 		class spidev;
 	}
 
-	class bdm3004 {
+	class mcp3004 {
 	public:
-		bdm3004(bdm::device::spi::spidev& dev);
+		mcp3004(bdm::device::spi::spidev& dev);
 
 		std::uint16_t read(std::uint8_t channel);
 		std::uint8_t read_as_byte(std::uint8_t channel);

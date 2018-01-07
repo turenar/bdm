@@ -3,7 +3,7 @@
 #include <g3log/logworker.hpp>
 #include "bdmbin/logger.hxx"
 #include "bdm/device/spi/spidev.hxx"
-#include "bdm/device/bdm3004.hxx"
+#include "bdm/device/mcp3004.hxx"
 
 int main(int, char**) {
 	bdmbin::logger logger;
@@ -15,7 +15,7 @@ int main(int, char**) {
 		conf.spi_mode = bdm::device::spi::mode::DEFAULT;
 
 		bdm::device::spi::spidev dev(bdm::unique_fd::open("/dev/spidev0.0", O_RDWR), conf);
-		bdm::device::bdm3004 ad_conv(dev);
+		bdm::device::mcp3004 ad_conv(dev);
 		for (int i = 0;i < 1024;++i) {
 			std::cout << std::hex << static_cast<std::uint32_t>(ad_conv.read_as_byte(0)) << '\t'
 					  << std::hex << static_cast<std::uint32_t>(ad_conv.read_as_byte(1)) << '\t'

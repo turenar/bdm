@@ -2,7 +2,7 @@ libbdm_files = [
 	'bdm/exception/error_info.cxx',
 	'bdm/exception/bdm_exception.cxx',
 	'bdm/logger/log_console_sink.cxx',
-	'bdm/device/bdm3004.cxx',
+	'bdm/device/mcp3004.cxx',
 	'bdm/device/spi/spidev.cxx',
 ]
 
