@@ -10,11 +10,11 @@ int main(int, char**) {
 	logger.install_logger();
 	try {
 		bdm::device::gpio::gpio_wrapper g;
-		g.set_pin_mode(0, bdm::device::gpio::io_mode::output);
+		g.set_pin_mode(17, bdm::device::gpio::io_mode::output);
 		while (true) {
-			g.write(0, true);
+			g.write(17, true);
 			std::this_thread::sleep_for(std::chrono::seconds(1));
-			g.write(0, false);
+			g.write(17, false);
 			std::this_thread::sleep_for(std::chrono::seconds(1));
 		}
 	} catch (boost::exception& ex) {
