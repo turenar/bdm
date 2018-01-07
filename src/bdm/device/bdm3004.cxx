@@ -11,7 +11,7 @@ namespace bdm::device {
 		const std::uint8_t tx[/*packet_size*/] = {0x01, compose_channel(channel), 0x00};
 		std::uint8_t rx[packet_size];
 		_dev.transfer(tx, rx);
-		return static_cast<uint16_t>(((tx[1] & 0x03) << 8) | tx[2]);
+		return static_cast<uint16_t>(((rx[1] & 0x03) << 8) | rx[2]);
 	}
 
 	std::uint8_t bdm3004::read_as_byte(std::uint8_t channel) {
