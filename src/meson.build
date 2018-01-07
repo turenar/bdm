@@ -41,6 +41,6 @@ executable('test_spi', 'test_spi.cxx',
 executable('test_gpio', 'test_gpio.cxx',
 	dependencies: [libbdm_dep, libbdmbin_dep],
 	cpp_args: project_warnings)
-executable('test_demux', 'test_gpio.cxx',
+executable('test_demux', 'test_demux.cxx',
 	dependencies: [libbdm_dep, libbdmbin_dep],
 	cpp_args: project_warnings)
