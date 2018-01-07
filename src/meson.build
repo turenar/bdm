@@ -28,11 +28,11 @@ libbdmbin_files = [
 libbdmbin = library('bdmbin', libbdmbin_files,
 	sources: vcs_rev,
 	dependencies: [libbdm_dep],
+	cpp_args: project_warnings,
 	include_directories: inc)
 libbdmbin_dep = declare_dependency(
 	link_with: libbdmbin,
 	dependencies: [libbdm_dep],
-	cpp_args: project_warnings,
 	include_directories: inc)
 
 executable('test_spi', 'test_spi.cxx',
