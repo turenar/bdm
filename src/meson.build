@@ -1,11 +1,12 @@
 libbdm_files = [
-	'bdm/exception/error_info.cxx',
-	'bdm/exception/bdm_exception.cxx',
-	'bdm/logger/log_console_sink.cxx',
 	'bdm/device/demultiplexer.cxx',
 	'bdm/device/gpio/gpio_wrapper.cxx',
 	'bdm/device/mcp3004.cxx',
 	'bdm/device/spi/spidev.cxx',
+	'bdm/exception/error_info.cxx',
+	'bdm/exception/bdm_exception.cxx',
+	'bdm/logger/log_console_sink.cxx',
+	'bdm/task/sound_buffer.cxx',
 ]
 
 vcs_rev = vcs_tag(input: 'version.hxx.in', output: 'version.hxx',
@@ -43,5 +44,8 @@ executable('test_gpio', 'test_gpio.cxx',
 	dependencies: [libbdm_dep, libbdmbin_dep],
 	cpp_args: project_warnings)
 executable('test_demux', 'test_demux.cxx',
+	dependencies: [libbdm_dep, libbdmbin_dep],
+	cpp_args: project_warnings)
+executable('test_microphone', 'test_microphone.cxx',
 	dependencies: [libbdm_dep, libbdmbin_dep],
 	cpp_args: project_warnings)
