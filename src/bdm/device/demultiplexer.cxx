@@ -1,5 +1,6 @@
 #include "bdm/device/demultiplexer.hxx"
 #include <cassert>
+#include "bdm/device/gpio/gpio_wrapper.hxx"
 
 namespace bdm::device {
 	demultiplexer::demultiplexer(gpio::gpio_wrapper& wrapper, std::uint8_t enabler, const std::uint8_t (& selector)[3])

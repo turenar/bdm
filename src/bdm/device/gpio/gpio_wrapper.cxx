@@ -19,4 +19,10 @@ namespace bdm::device::gpio {
 		LOG(DEBUG) << "gpio.write: pin=" << pin << ", high=" << std::boolalpha << high;
 		digitalWrite(pin, high);
 	}
+
+	bool gpio_wrapper::read(int pin) {
+		int val = digitalRead(pin);
+		LOG(DEBUG) << "gpio.read: pin=" << pin << ", high=" << val;
+		return val != 0;
+	}
 }

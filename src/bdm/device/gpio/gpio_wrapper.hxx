@@ -9,5 +9,6 @@ namespace bdm::device::gpio{
 
 		void set_pin_mode(int pin, io_mode);
 		void write(int pin, bool high);
+		bool read(int pin);
 	};
 }

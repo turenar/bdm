@@ -1,9 +1,12 @@
 #pragma once
 
 #include <cstdint>
-#include "bdm/device/gpio/gpio_wrapper.hxx"
 
 namespace bdm::device {
+	namespace gpio {
+		class gpio_wrapper;
+	}
+
 	class demultiplexer {
 	public:
 		demultiplexer(gpio::gpio_wrapper&, std::uint8_t enabler, const std::uint8_t (& selector)[3]);
@@ -12,6 +15,7 @@ namespace bdm::device {
 		void disable();
 		void enable();
 		void enable(bool enabled);
+
 	private:
 		gpio::gpio_wrapper& _gpio;
 		std::uint8_t _enabler_pin;
