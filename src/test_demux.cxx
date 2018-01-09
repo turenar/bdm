@@ -12,8 +12,11 @@ int main(int, char**) {
 	try {
 		bdm::device::gpio::gpio_wrapper g;
 		bdm::device::demultiplexer demux(g, 23, {17, 21, 22});
+		g.set_pin_mode(14, bdm::device::gpio::io_mode::input);
 		while (true) {
-			demux.enable();
+			if (g.read(14)) {
+				demux.enable();
+			}
 			demux.select(5);
 			std::this_thread::sleep_for(std::chrono::seconds(1));
 			demux.select(1);
