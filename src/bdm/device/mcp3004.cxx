@@ -17,4 +17,8 @@ namespace bdm::device {
 	std::uint8_t mcp3004::read_as_byte(std::uint8_t channel) {
 		return static_cast<std::uint8_t>(read(channel) >> 2);
 	}
+
+	std::int16_t mcp3004::read_as_signed(std::uint8_t channel) {
+		return static_cast<int16_t>((read(channel) << (16 - 10)) - 0x8000l);
+	}
 }

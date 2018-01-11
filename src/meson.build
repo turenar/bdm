@@ -7,6 +7,8 @@ libbdm_files = [
 	'bdm/exception/bdm_exception.cxx',
 	'bdm/logger/log_console_sink.cxx',
 	'bdm/task/sound_buffer.cxx',
+	'bdm/task/delay_estimation.cxx',
+	'bdm/task/position_estimation.cxx',
 ]
 
 vcs_rev = vcs_tag(input: 'version.hxx.in', output: 'version.hxx',
@@ -47,5 +49,8 @@ executable('test_demux', 'test_demux.cxx',
 	dependencies: [libbdm_dep, libbdmbin_dep],
 	cpp_args: project_warnings)
 executable('test_microphone', 'test_microphone.cxx',
+	dependencies: [libbdm_dep, libbdmbin_dep],
+	cpp_args: project_warnings)
+executable('test_delay', 'test_delay.cxx',
 	dependencies: [libbdm_dep, libbdmbin_dep],
 	cpp_args: project_warnings)
