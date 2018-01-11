@@ -53,7 +53,6 @@ namespace {
 			std::this_thread::sleep_for(std::chrono::milliseconds(250));
 			return;
 		}
-		_demux.disable();
 		LOG(INFO) << "loop start";
 		auto start = std::chrono::system_clock::now();
 		_buf.fill();
@@ -72,7 +71,8 @@ namespace {
 		_pe.estimate_position(0, t1, t2, t3, p);
 		LOG(INFO) << "estimated position: " << p[0] << ' ' << p[1] << ' ' << p[2];
 
-		int led;
+		_demux.disable();
+		std::uint8_t led;
 		if (p[0] >= 0) {
 			if (p[1] >= 0) {
 				led = 1;
