@@ -1,4 +1,5 @@
 #include <chrono>
+#include <cmath>
 #include <iostream>
 #include <boost/exception/diagnostic_information.hpp>
 #include <g3log/logworker.hpp>
@@ -70,6 +71,14 @@ namespace {
 		double p[3];
 		pe.estimate_position(0, t1, t2, t3, p);
 		LOG(INFO) << "estimated position: " << p[0] << ' ' << p[1] << ' ' << p[2];
+
+		double angle;
+		if (p[0] <= 0) {
+			angle = 180 - std::atan((-p[1]) / p[0]);
+		} else {
+			angle = std::atan(p[1] / p[0]);
+		}
+		LOG(INFO << "angle: " << angle);
 	}
 }
 
