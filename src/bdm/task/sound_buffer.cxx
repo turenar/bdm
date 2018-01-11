@@ -24,7 +24,7 @@ namespace bdm::task {
 		for (std::size_t i = 0; i < buf_size; ++i) {
 			for (std::uint8_t ch = 0; ch < _buf.size(); ++ch) {
 				std::int16_t val = _converter.read_as_signed(ch);
-				_buf[ch][i] = static_cast<std::int16_t>(val < threshold ? 0 : val);
+				_buf[ch][i] = static_cast<std::int16_t>(std::abs(val) < threshold ? 0 : val);
 			}
 		}
 	}
