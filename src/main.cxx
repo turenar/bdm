@@ -78,7 +78,7 @@ namespace {
 		} else {
 			angle = std::atan(p[1] / p[0]);
 		}
-		LOG(INFO << "angle: " << angle);
+		LOG(INFO) << "angle: " << angle);
 	}
 }
 
