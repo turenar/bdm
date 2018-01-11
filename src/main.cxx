@@ -53,6 +53,7 @@ namespace {
 			std::this_thread::sleep_for(std::chrono::milliseconds(250));
 			return;
 		}
+		_demux.disable();
 		LOG(INFO) << "loop start";
 		auto start = std::chrono::system_clock::now();
 		_buf.fill();
@@ -67,9 +68,8 @@ namespace {
 		double t3 = _de.get_delay(_buf.buf_size, _buf.get_buf(0), _buf.get_buf(3)) * sample_time;
 		LOG(INFO) << "estimated delay: " << t1 << ' ' << t2 << ' ' << t3;
 
-		bdm::task::position_estimation pe;
 		double p[3];
-		pe.estimate_position(0, t1, t2, t3, p);
+		_pe.estimate_position(0, t1, t2, t3, p);
 		LOG(INFO) << "estimated position: " << p[0] << ' ' << p[1] << ' ' << p[2];
 
 		int led;
@@ -87,6 +87,9 @@ namespace {
 			}
 		}
 		LOG(INFO) << "angle: " << led;
+
+		_demux.select(led);
+		_demux.enable();
 	}
 }
 
