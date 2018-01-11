@@ -1,199 +1,61 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
+#include <complex>
+#include <memory>
+#include "bdm/task/delay_estimation.hxx"
+#include "bdm/math/util.hxx"
 
-#define FRAMELEN 16384
-
-void FFT(double* xr, double* xi, double* Xr, double* Xi, int N) {
-	int i, j, k, n, n2;
-	double theta, wr, wi;
-
-	static double* rbuf, * ibuf;
-	static int bufsize = 0;
-
-	/* memory allocation for buffers */
-	if (bufsize != N) {
-		bufsize = N;
-		rbuf = (double*) calloc(sizeof(double), bufsize);
-		ibuf = (double*) calloc(sizeof(double), bufsize);
-	}
-
-	/* bit reverse of xr[] & xi[] --> store to rbuf[] and ibuf[] */
-	i = j = 0;
-	rbuf[j] = xr[j];
-	ibuf[j] = xi[j];
-	for (j = 1; j < N - 1; j++) {
-		for (k = N / 2; k <= i; k /= 2) { i -= k; }
-		i += k;
-		rbuf[j] = xr[i];
-		ibuf[j] = xi[i];
-	}
-	rbuf[j] = xr[j];
-	ibuf[j] = xi[j];
-
-	/* butterfly calculation */
-	theta = -2.0 * M_PI;
-	for (n = 1; (n2 = n * 2) <= N; n = n2) {
-		theta *= 0.5;
-		for (i = 0; i < n; i++) {
-			wr = cos(theta * i);
-			wi = sin(theta * i);
-			for (j = i; j < N; j += n2) {
-				k = j + n;
-				/*
-				  X[j] = 1*buf[j] + W*buf[k];
-				  X[k] = 1*buf[j] - W*buf[k];
-				  Note : X[], buf[], and W are complex numbers.
-				  Re{ X[n] } = Xr[n], Im{ X[n] } = Xi[n];
-				  Re{ buf[n] } = rbuf[n], Im{ buf[n] } = ibuf[n];
-				  Re{ W } = wr, Im{ W } = wi;
-				*/
-				Xr[j] = rbuf[j] + wr * rbuf[k] - wi * ibuf[k];  /* ??????????, using wr, wi, rbuf, and ibuf */
-				Xi[j] = ibuf[j] + wr * ibuf[k] + wi * rbuf[k];  /* ??????????, using wr, wi, rbuf, and ibuf */
-				Xr[k] = rbuf[j] - wr * rbuf[k] + wi * ibuf[k];  /* ??????????, using wr, wi, rbuf, and ibuf */
-				Xi[k] = ibuf[j] - wr * ibuf[k] - wi * rbuf[k];  /* ??????????, using wr, wi, rbuf, and ibuf */
+namespace bdm::task {
+	namespace {
+		void window(std::size_t buf_size, const sound_sample_t* in, std::complex<double>* out) {
+			for (std::size_t i = 0; i < buf_size; ++i) {
+				out[i] = std::complex<double>{
+						(0.54 - 0.46 * cos(2 * bdm::math::pi * i / (buf_size - 1))) * in[i],
+						0};
 			}
 		}
-
-		for (i = 0; i < N; i++) {
-			rbuf[i] = Xr[i];
-			ibuf[i] = Xi[i];
-		}
-	}
-	return;
-}
-
-void IFFT(double* Xr, double* Xi, double* xr, double* xi, int N) {
-	int i, j, k, n, n2;
-	double theta, wr, wi;
-
-	static double* rbuf, * ibuf;
-	static int bufsize = 0;
-
-	/* memory allocation for buffers */
-	if (bufsize != N) {
-		bufsize = N;
-		rbuf = (double*) calloc(sizeof(double), bufsize);
-		ibuf = (double*) calloc(sizeof(double), bufsize);
 	}
 
-	/* bit reverse of Xr[] & Xi[] --> store to rbuf[] and ibuf[] */
-	i = j = 0;
-	rbuf[j] = Xr[j] / N;
-	ibuf[j] = Xi[j] / N;
-	for (j = 1; j < N - 1; j++) {
-		for (k = N / 2; k <= i; k /= 2) { i -= k; }
-		i += k;
-		rbuf[j] = Xr[i] / N;
-		ibuf[j] = Xi[i] / N;
-	}
-	rbuf[j] = Xr[j] / N;
-	ibuf[j] = Xi[j] / N;
-
-	/* butterfly calculation */
-	theta = 2.0 * M_PI;  /* not -2.0*M_PI !!! */
-	for (n = 1; (n2 = n * 2) <= N; n = n2) {
-		theta *= 0.5;
-		for (i = 0; i < n; i++) {
-			wr = cos(theta * i);
-			wi = sin(theta * i);
-			for (j = i; j < N; j += n2) {
-				k = j + n;
-				/*
-				  x[j] = 1*buf[j] + W*buf[k];
-				  x[k] = 1*buf[j] - W*buf[k];
-				  Note : x[], buf[], and W are complex numbers.
-				  Re{ x[n] } = xr[n], Im{ x[n] } = xi[n];
-				  Re{ buf[n] } = rbuf[n], Im{ buf[n] } = ibuf[n];
-				  Re{ W } = wr, Im{ W } = wi;
-				*/
-				xr[j] = rbuf[j] + wr * rbuf[k] - wi * ibuf[k];
-				xi[j] = ibuf[j] + wr * ibuf[k] + wi * rbuf[k];
-				xr[k] = rbuf[j] - wr * rbuf[k] + wi * ibuf[k];
-				xi[k] = ibuf[j] - wr * ibuf[k] - wi * rbuf[k];
-			}
-		}
-
-		for (i = 0; i < N; i++) {
-			rbuf[i] = xr[i];
-			ibuf[i] = xi[i];
-		}
-	}
-	return;
-}
-
-int getDelay(short* sig1, short* sig2) {
-	int i;
-	short* sdata;
-	double* x1r, * x1i, * X1r, * X1i;
-	double* x2r, * x2i, * X2r, * X2i;
-	double* yr, * yi, * Yr, * Yi;
-
-	/* memory allocation */
-	sdata = (short*) calloc(sizeof(short), FRAMELEN);
-	x1r = (double*) calloc(sizeof(double), FRAMELEN);
-	x1i = (double*) calloc(sizeof(double), FRAMELEN);
-	X1r = (double*) calloc(sizeof(double), FRAMELEN);
-	X1i = (double*) calloc(sizeof(double), FRAMELEN);
-	x2r = (double*) calloc(sizeof(double), FRAMELEN);
-	x2i = (double*) calloc(sizeof(double), FRAMELEN);
-	X2r = (double*) calloc(sizeof(double), FRAMELEN);
-	X2i = (double*) calloc(sizeof(double), FRAMELEN);
-	yr = (double*) calloc(sizeof(double), FRAMELEN);
-	yi = (double*) calloc(sizeof(double), FRAMELEN);
-	Yr = (double*) calloc(sizeof(double), FRAMELEN);
-	Yi = (double*) calloc(sizeof(double), FRAMELEN);
-/*
-  fseek( fpDAT, 0, SEEK_SET );
-  fread( sdata, sizeof(short), framelen, fpDAT );
-*/
-	for (i = 0; i < FRAMELEN; i++) {
-		x1r[i] = (0.54 - 0.46 * cos(2 * M_PI * i / (FRAMELEN - 1))) * sig1[i];
-		x1i[i] = 0.0;
-	}
-/*
-  fseek( fpDAT, 20*sizeof(short), SEEK_SET );
-  fread( sdata, sizeof(short), framelen, fpDAT );
-  fclose( fpDAT );
-*/
-	for (i = 0; i < FRAMELEN; i++) {
-		x2r[i] = (0.54 - 0.46 * cos(2 * M_PI * i / (FRAMELEN - 1))) * sig2[i];
-		x2i[i] = 0.0;
+	delay_estimation::delay_estimation(std::size_t) {
 	}
 
-	//Fourier transform
-	FFT(x1r, x1i, X1r, X1i, FRAMELEN);
-	FFT(x2r, x2i, X2r, X2i, FRAMELEN);
+	size_t delay_estimation::get_delay(std::size_t buf_size, const sound_sample_t* s1, const sound_sample_t* s2) {
+		bdm::math::assert_pow(buf_size);
 
-	for (i = 0; i < FRAMELEN; i++) {
-		//make complex conjugate of X1
-		X1i[i] *= -1;
-	}
+		using array_type = std::complex<double>[];
+		auto x1 = std::make_unique<array_type>(buf_size);
+		auto x1_fft = std::make_unique<array_type>(buf_size);
+		auto x2 = std::make_unique<array_type>(buf_size);
+		auto x2_fft = std::make_unique<array_type>(buf_size);
+		auto y_fft = std::make_unique<array_type>(buf_size);
+		auto y = std::make_unique<array_type>(buf_size);
 
-	for (i = 0; i < FRAMELEN; i++) {
+		window(buf_size, s1, x1.get());
+		window(buf_size, s2, x2.get());
+
+		_fft.fft(buf_size, x1.get(), x1_fft.get());
+		_fft.fft(buf_size, x2.get(), x2_fft.get());
+
 		//make cross spectrum
-		Yr[i] = X1r[i] * X2r[i] - X1i[i] * X2i[i];
-		Yi[i] = X1r[i] * X2i[i] + X1i[i] * X2r[i];
-	}
-
-	//make cross-correlation function
-	IFFT(Yr, Yi, yr, yi, FRAMELEN);
-/*
-  for( i = 0 ; i < FRAMELEN ; i++ ) {
-    printf( "%d %lf\n", i, yr[i] );
-  }
-*/
-	//estimate time shift
-	double max = 0;
-	int peek = 0;
-	for (i = 0; i < FRAMELEN; i++) {
-		if (yr[i] > max) {
-			peek = i;
-			max = yr[i];
+		for (std::size_t i = 0; i < buf_size; i++) {
+			y_fft[i] = std::conj(x1_fft[i]) * x2_fft[i];
 		}
-	}
-	//printf( "time shift : %d\n", (peek + FRAMELEN/2)%FRAMELEN - FRAMELEN/2 );
-	int delay = (peek + FRAMELEN / 2) % FRAMELEN - FRAMELEN / 2;
 
-	return (delay);
+		_fft.ifft(buf_size, y_fft.get(), y.get());
+
+		//estimate time shift
+		double max = 0;
+		std::size_t peek = 0;
+		for (std::size_t i = 0; i < buf_size; i++) {
+			if (y[i].real() > max) {
+				peek = i;
+				max = y[i].real();
+			}
+		}
+		//printf( "time shift : %d\n", (peek + FRAMELEN/2)%FRAMELEN - FRAMELEN/2 );
+		std::size_t delay = (peek + buf_size / 2) % buf_size - buf_size / 2;
+
+		return delay;
+	}
 }

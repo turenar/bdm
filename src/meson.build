@@ -3,9 +3,12 @@ libbdm_files = [
 	'bdm/device/gpio/gpio_wrapper.cxx',
 	'bdm/device/mcp3004.cxx',
 	'bdm/device/spi/spidev.cxx',
-	'bdm/exception/error_info.cxx',
 	'bdm/exception/bdm_exception.cxx',
+	'bdm/exception/error_info.cxx',
 	'bdm/logger/log_console_sink.cxx',
+	'bdm/math/fast_fourier_transform.cxx',
+	'bdm/task/delay_estimation.cxx',
+	'bdm/task/position_estimation.cxx',
 	'bdm/task/sound_buffer.cxx',
 ]
 
@@ -47,5 +50,8 @@ executable('test_demux', 'test_demux.cxx',
 	dependencies: [libbdm_dep, libbdmbin_dep],
 	cpp_args: project_warnings)
 executable('test_microphone', 'test_microphone.cxx',
+	dependencies: [libbdm_dep, libbdmbin_dep],
+	cpp_args: project_warnings)
+executable('test_delay', 'test_delay.cxx',
 	dependencies: [libbdm_dep, libbdmbin_dep],
 	cpp_args: project_warnings)

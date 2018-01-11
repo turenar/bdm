@@ -1,31 +1,27 @@
 #include "bdm/task/sound_buffer.hxx"
-#include <cassert>
+#include "bdm/math/util.hxx"
 #include "bdm/device/mcp3004.hxx"
 
 namespace bdm::task {
-	namespace {
-		bool is_pow(std::size_t s) {
-			return !(s & (s - 1));
-		}
-	}
 
-	sound_buffer::sound_buffer(bdm::device::mcp3004& converter)
-			: _converter(converter) {
-		assert(is_pow(buf_size));
+	sound_buffer::sound_buffer(bdm::device::mcp3004& converter, std::size_t buf_size)
+			: _converter(converter), _buf_size(buf_size) {
+		bdm::math::assert_pow(buf_size);
 		for (auto& channel_buf:_buf) {
-			channel_buf = std::make_unique<std::uint8_t[]>(buf_size);
+			channel_buf = std::make_unique<sound_sample_t[]>(buf_size);
 		}
 	}
 
 	void sound_buffer::fill() {
-		for (std::size_t i = 0; i < buf_size; ++i) {
+		for (std::size_t i = 0; i < _buf_size; ++i) {
 			for (std::uint8_t ch = 0; ch < _buf.size(); ++ch) {
-				_buf[ch][i] = _converter.read_as_byte(ch);
+				std::uint16_t unsigned_sample = _converter.read(ch) << shift_width;
+				_buf[ch][i] = static_cast<unsigned short>(static_cast<int>(unsigned_sample) - 0x8000);
 			}
 		}
 	}
 
-	const std::uint8_t* sound_buffer::get_buf(std::size_t index) {
+	const sound_sample_t* sound_buffer::get_buf(std::size_t index) {
 		return _buf[index].get();
 	}
 }
