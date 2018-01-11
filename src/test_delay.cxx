@@ -23,23 +23,23 @@ int main(int, char**) {
 		if (NULL == (fpDAT = fopen("a.raw", "r"))) {
 			exit(1);
 		}
-		auto sigdata1 = (short*) calloc(sizeof(short), FRAMELEN);
-		auto sigdata2 = (short*) calloc(sizeof(short), FRAMELEN);
-		auto sigdata3 = (short*) calloc(sizeof(short), FRAMELEN);
-		auto sigdata4 = (short*) calloc(sizeof(short), FRAMELEN);
+		auto sigdata1 = std::make_unique<short[]>(FRAMELEN);
+		auto sigdata2 = std::make_unique<short[]>(FRAMELEN);
+		auto sigdata3 = std::make_unique<short[]>(FRAMELEN);
+		auto sigdata4 = std::make_unique<short[]>(FRAMELEN);
 		fseek(fpDAT, 15 * sizeof(short), SEEK_SET);
-		fread(sigdata1, sizeof(short), FRAMELEN, fpDAT);
+		fread(sigdata1.get(), sizeof(short), FRAMELEN, fpDAT);
 		fseek(fpDAT, 0 * sizeof(short), SEEK_SET);
-		fread(sigdata2, sizeof(short), FRAMELEN, fpDAT);
+		fread(sigdata2.get(), sizeof(short), FRAMELEN, fpDAT);
 		fseek(fpDAT, 0 * sizeof(short), SEEK_SET);
-		fread(sigdata3, sizeof(short), FRAMELEN, fpDAT);
+		fread(sigdata3.get(), sizeof(short), FRAMELEN, fpDAT);
 		fseek(fpDAT, 5 * sizeof(short), SEEK_SET);
-		fread(sigdata4, sizeof(short), FRAMELEN, fpDAT);
+		fread(sigdata4.get(), sizeof(short), FRAMELEN, fpDAT);
 		fclose(fpDAT);
 		bdm::task::delay_estimation de;
-		double T1 = de.get_delay(FRAMELEN, sigdata1, sigdata2) * sample_time;
-		double T2 = de.get_delay(FRAMELEN, sigdata1, sigdata3) * sample_time;
-		double T3 = de.get_delay(FRAMELEN, sigdata1, sigdata4) * sample_time;
+		double T1 = de.get_delay(FRAMELEN, sigdata1.get(), sigdata2.get()) * sample_time;
+		double T2 = de.get_delay(FRAMELEN, sigdata1.get(), sigdata3.get()) * sample_time;
+		double T3 = de.get_delay(FRAMELEN, sigdata1.get(), sigdata4.get()) * sample_time;
 
 		bdm::task::position_estimation pe;
 		double p[3];

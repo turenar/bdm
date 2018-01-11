@@ -6,7 +6,7 @@
 namespace bdm::task {
 	namespace {
 		void FFT(double* xr, double* xi, double* Xr, double* Xi, std::size_t N) {
-			int i, j, k, n, n2;
+			std::size_t i, j, k, n, n2;
 			double theta, wr, wi;
 
 			static double* rbuf, * ibuf;
@@ -15,8 +15,8 @@ namespace bdm::task {
 			/* memory allocation for buffers */
 			if (bufsize != N) {
 				bufsize = N;
-				rbuf = (double*) calloc(sizeof(double), bufsize);
-				ibuf = (double*) calloc(sizeof(double), bufsize);
+				rbuf = static_cast<double*>(calloc(sizeof(double), bufsize));
+				ibuf = static_cast<double*>(calloc(sizeof(double), bufsize));
 			}
 
 			/* bit reverse of xr[] & xi[] --> store to rbuf[] and ibuf[] */
@@ -67,7 +67,7 @@ namespace bdm::task {
 		}
 
 		void IFFT(double* Xr, double* Xi, double* xr, double* xi, std::size_t N) {
-			int i, j, k, n, n2;
+			std::size_t i, j, k, n, n2;
 			double theta, wr, wi;
 
 			static double* rbuf, * ibuf;
@@ -76,8 +76,8 @@ namespace bdm::task {
 			/* memory allocation for buffers */
 			if (bufsize != N) {
 				bufsize = N;
-				rbuf = (double*) calloc(sizeof(double), bufsize);
-				ibuf = (double*) calloc(sizeof(double), bufsize);
+				rbuf = static_cast<double*>(calloc(sizeof(double), bufsize));
+				ibuf = static_cast<double*>(calloc(sizeof(double), bufsize));
 			}
 
 			/* bit reverse of Xr[] & Xi[] --> store to rbuf[] and ibuf[] */
@@ -129,26 +129,24 @@ namespace bdm::task {
 	}
 
 	int delay_estimation::get_delay(std::size_t buf_size, const std::int16_t* sig1, const std::int16_t* sig2) {
-		int i;
-		short* sdata;
+		std::size_t i;
 		double* x1r, * x1i, * X1r, * X1i;
 		double* x2r, * x2i, * X2r, * X2i;
 		double* yr, * yi, * Yr, * Yi;
 
 		/* memory allocation */
-		sdata = (short*) calloc(sizeof(short), buf_size);
-		x1r = (double*) calloc(sizeof(double), buf_size);
-		x1i = (double*) calloc(sizeof(double), buf_size);
-		X1r = (double*) calloc(sizeof(double), buf_size);
-		X1i = (double*) calloc(sizeof(double), buf_size);
-		x2r = (double*) calloc(sizeof(double), buf_size);
-		x2i = (double*) calloc(sizeof(double), buf_size);
-		X2r = (double*) calloc(sizeof(double), buf_size);
-		X2i = (double*) calloc(sizeof(double), buf_size);
-		yr = (double*) calloc(sizeof(double), buf_size);
-		yi = (double*) calloc(sizeof(double), buf_size);
-		Yr = (double*) calloc(sizeof(double), buf_size);
-		Yi = (double*) calloc(sizeof(double), buf_size);
+		x1r = static_cast<double*>(calloc(sizeof(double), buf_size));
+		x1i = static_cast<double*>(calloc(sizeof(double), buf_size));
+		X1r = static_cast<double*>(calloc(sizeof(double), buf_size));
+		X1i = static_cast<double*>(calloc(sizeof(double), buf_size));
+		x2r = static_cast<double*>(calloc(sizeof(double), buf_size));
+		x2i = static_cast<double*>(calloc(sizeof(double), buf_size));
+		X2r = static_cast<double*>(calloc(sizeof(double), buf_size));
+		X2i = static_cast<double*>(calloc(sizeof(double), buf_size));
+		yr = static_cast<double*>(calloc(sizeof(double), buf_size));
+		yi = static_cast<double*>(calloc(sizeof(double), buf_size));
+		Yr = static_cast<double*>(calloc(sizeof(double), buf_size));
+		Yi = static_cast<double*>(calloc(sizeof(double), buf_size));
 /*
   fseek( fpDAT, 0, SEEK_SET );
   fread( sdata, sizeof(short), framelen, fpDAT );
@@ -201,6 +199,18 @@ namespace bdm::task {
 		//printf( "time shift : %d\n", (peek + FRAMELEN/2)%FRAMELEN - FRAMELEN/2 );
 		int delay = (peek + buf_size / 2) % buf_size - buf_size / 2;
 
+		free(x1r);
+		free(x1i);
+		free(X1r);
+		free(X1i);
+		free(x2r);
+		free(x2i);
+		free(X2r);
+		free(X2i);
+		free(yr);
+		free(yi);
+		free(Yr);
+		free(Yi);
 		return (delay);
 	}
 }
