@@ -44,6 +44,7 @@ namespace {
 			  _sp(bdm::unique_fd::open("/dev/spidev0.0", O_RDWR), get_spi_conf()),
 			  _mc(_sp),
 			  _buf(_mc) {
+		_g.set_pin_mode(gpio_button, bdm::device::gpio::io_mode::input);
 	}
 
 	void runner::loop() {
