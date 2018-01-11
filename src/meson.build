@@ -54,3 +54,6 @@ executable('test_microphone', 'test_microphone.cxx',
 executable('test_delay', 'test_delay.cxx',
 	dependencies: [libbdm_dep, libbdmbin_dep],
 	cpp_args: project_warnings)
+executable('main', 'main.cxx',
+	dependencies: [libbdm_dep, libbdmbin_dep],
+	cpp_args: project_warnings)

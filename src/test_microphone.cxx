@@ -1,14 +1,14 @@
 #include <chrono>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <boost/exception/diagnostic_information.hpp>
 #include <g3log/logworker.hpp>
 #include "bdm/device/demultiplexer.hxx"
-#include "bdm/device/gpio/gpio_wrapper.hxx"
-#include "bdmbin/logger.hxx"
-#include "bdm/task/sound_buffer.hxx"
 #include "bdm/device/mcp3004.hxx"
+#include "bdm/device/gpio/gpio_wrapper.hxx"
 #include "bdm/device/spi/spidev.hxx"
+#include "bdm/task/sound_buffer.hxx"
+#include "bdmbin/logger.hxx"
 
 int main(int, char**) {
 	bdmbin::logger logger;

@@ -10,17 +10,17 @@ namespace bdm::device::gpio {
 		}
 	}
 
-	void gpio_wrapper::set_pin_mode(int pin, io_mode m) {
+	void gpio_wrapper::set_pin_mode(std::uint8_t pin, io_mode m) {
 		LOG(DEBUG) << "gpio.set_pin_mode: pin=" << pin << ", mode=" << static_cast<int>(m);
 		pinMode(pin, static_cast<int>(m));
 	}
 
-	void gpio_wrapper::write(int pin, bool high) {
+	void gpio_wrapper::write(std::uint8_t pin, bool high) {
 		LOG(DEBUG) << "gpio.write: pin=" << pin << ", high=" << std::boolalpha << high;
 		digitalWrite(pin, high);
 	}
 
-	bool gpio_wrapper::read(int pin) {
+	bool gpio_wrapper::read(std::uint8_t pin) {
 		int val = digitalRead(pin);
 		LOG(DEBUG) << "gpio.read: pin=" << pin << ", high=" << val;
 		return val != 0;

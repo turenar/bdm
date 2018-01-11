@@ -1,7 +1,7 @@
+#include "bdm/task/delay_estimation.hxx"
+#include <cmath>
 #include <cstdio>
 #include <cstdlib>
-#include <cmath>
-#include "bdm/task/delay_estimation.hxx"
 
 namespace bdm::task {
 	namespace {

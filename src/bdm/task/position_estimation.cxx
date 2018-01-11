@@ -1,7 +1,7 @@
-#include <cstdio>
-#include <cmath>
-#include <cassert>
 #include "bdm/task/position_estimation.hxx"
+#include <cassert>
+#include <cmath>
+#include <cstdio>
 
 namespace bdm::task {
 	namespace {
