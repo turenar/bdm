@@ -35,7 +35,7 @@ int main(int argc, char const *argv[]) {
   z = (V*V / (8*Z)) * (tz2 + 2*t*tz1);
 
   e = (X-x)*(X-x) + (Y-y)*(Y-y) + (Z-z)*(Z-z) - V*V*(t+T0)*(t+T0);
-  sign = getSign(e);
+  sign = get_sign(e);
 
   while(true){
     //calculation

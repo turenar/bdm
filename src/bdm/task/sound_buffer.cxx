@@ -13,19 +13,19 @@ namespace bdm::task {
 			: _converter(converter) {
 		assert(is_pow(buf_size));
 		for (auto& channel_buf:_buf) {
-			channel_buf = std::make_unique<std::uint8_t[]>(buf_size);
+			channel_buf = std::make_unique<std::int16_t[]>(buf_size);
 		}
 	}
 
 	void sound_buffer::fill() {
 		for (std::size_t i = 0; i < buf_size; ++i) {
 			for (std::uint8_t ch = 0; ch < _buf.size(); ++ch) {
-				_buf[ch][i] = _converter.read_as_byte(ch);
+				_buf[ch][i] = _converter.read_as_signed(ch);
 			}
 		}
 	}
 
-	const std::uint8_t* sound_buffer::get_buf(std::size_t index) {
+	const std::int16_t* sound_buffer::get_buf(std::size_t index) {
 		return _buf[index].get();
 	}
 }

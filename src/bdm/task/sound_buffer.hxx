@@ -16,10 +16,10 @@ namespace bdm::task {
 
 		void fill();
 
-		const std::uint8_t* get_buf(std::size_t index);
+		const std::int16_t* get_buf(std::size_t index);
 
 	private:
 		bdm::device::mcp3004& _converter;
-		std::array<std::unique_ptr<std::uint8_t[]>, microphone_count> _buf;
+		std::array<std::unique_ptr<std::int16_t[]>, microphone_count> _buf;
 	};
 }

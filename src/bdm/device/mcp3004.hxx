@@ -13,6 +13,7 @@ namespace bdm::device {
 
 		std::uint16_t read(std::uint8_t channel);
 		std::uint8_t read_as_byte(std::uint8_t channel);
+		std::int16_t read_as_signed(std::uint8_t channel);
 
 	private:
 		static constexpr std::size_t packet_size = 3;
