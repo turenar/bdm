@@ -86,7 +86,7 @@ namespace {
 				led = 3;
 			}
 		}
-		LOG(INFO) << "angle: " << led;
+		LOG(INFO) << "led: " << static_cast<int>(led);
 
 		_demux.select(led);
 		_demux.enable();
