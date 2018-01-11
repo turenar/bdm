@@ -4,6 +4,8 @@
 
 namespace bdm::task {
 	namespace {
+		constexpr int threshold = 0x1000;
+
 		bool is_pow(std::size_t s) {
 			return !(s & (s - 1));
 		}
@@ -17,10 +19,12 @@ namespace bdm::task {
 		}
 	}
 
+
 	void sound_buffer::fill() {
 		for (std::size_t i = 0; i < buf_size; ++i) {
 			for (std::uint8_t ch = 0; ch < _buf.size(); ++ch) {
-				_buf[ch][i] = _converter.read_as_signed(ch);
+				std::int16_t val = _converter.read_as_signed(ch);
+				_buf[ch][i] = static_cast<std::int16_t>(val < threshold ? 0 : val);
 			}
 		}
 	}
