@@ -57,7 +57,7 @@ namespace {
 		_buf.fill();
 		auto end = std::chrono::system_clock::now();
 
-		using sec_type = std::chrono::duration<double, std::chrono::seconds::period>;
+		using sec_type = std::chrono::duration<double, std::chrono::milliseconds::period>;
 		auto sample_time = sec_type(end - start).count() / _buf.buf_size;
 
 		LOG(DEBUG) << "sample time: " << sample_time;
