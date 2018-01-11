@@ -26,7 +26,7 @@ int main(int, char**) {
 		for (std::size_t ch = 0; ch < buf.microphone_count; ++ch) {
 			auto b = buf.get_buf(ch);
 			std::int8_t tmp[buf.buf_size];
-			std::transform(b, b + buf.buf_size, tmp, [](std::int16_t s) { return static_cast<std::int8_t>(s); });
+			std::transform(b, b + buf.buf_size, tmp, [](std::int16_t s) { return static_cast<std::int8_t>(s >> 8); });
 			std::ofstream os("ch" + std::to_string(ch) + ".raw");
 			os.write(reinterpret_cast<const char*>(tmp), buf.buf_size);
 		}
