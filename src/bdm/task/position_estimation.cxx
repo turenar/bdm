@@ -18,7 +18,7 @@ namespace bdm::task {
 	void position_estimation::estimate_position(double T0, double T1, double T2, double T3, double* pos) {
 
 		//double T0 = 0, T1 = 0.6, T2 = 1.5, T3 = 1.55;  //delay
-		double X = 200, Y = 200, Z = 200; //position
+		double X = 125, Y = 125, Z = 82; //position
 		double V = 340; //velocity
 		double LIMIT = 0.01;
 
