@@ -25,8 +25,10 @@ int main(int, char**) {
 		buf.fill();
 		for (std::size_t ch = 0; ch < buf.microphone_count; ++ch) {
 			auto b = buf.get_buf(ch);
+			std::int8_t tmp[buf.buf_size];
+			std::transform(b, b + buf.buf_size, tmp, [](std::int16_t s) { return static_cast<std::int8_t>(s); });
 			std::ofstream os("ch" + std::to_string(ch) + ".raw");
-			os.write(reinterpret_cast<const char*>(b), buf.buf_size);
+			os.write(reinterpret_cast<const char*>(tmp), buf.buf_size);
 		}
 	} catch (boost::exception& ex) {
 		LOG(ERROR) << "uncaught exception";
