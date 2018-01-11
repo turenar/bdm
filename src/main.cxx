@@ -72,13 +72,21 @@ namespace {
 		pe.estimate_position(0, t1, t2, t3, p);
 		LOG(INFO) << "estimated position: " << p[0] << ' ' << p[1] << ' ' << p[2];
 
-		double angle;
-		if (p[0] <= 0) {
-			angle = 180 - std::atan((-p[1]) / p[0]);
+		int led;
+		if (p[0] >= 0) {
+			if (p[1] >= 0) {
+				led = 1;
+			} else {
+				led = 4;
+			}
 		} else {
-			angle = std::atan(p[1] / p[0]);
+			if (p[1] >= 0) {
+				led = 2;
+			} else {
+				led = 3;
+			}
 		}
-		LOG(INFO) << "angle: " << angle;
+		LOG(INFO) << "angle: " << led;
 	}
 }
 
