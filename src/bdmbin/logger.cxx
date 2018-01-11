@@ -18,7 +18,6 @@ namespace bdmbin {
 		worker->addSink(std::make_unique<bdm::logger::log_console_sink>(), &bdm::logger::log_console_sink::log);
 //#endif
 		g3::initializeLogging(worker.get());
-		LOG(INFO) << "Version: " << bdm::VERSION;
 		_worker = std::move(worker);
 	}
 }

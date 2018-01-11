@@ -11,11 +11,9 @@ libbdm_files = [
 	'bdm/task/position_estimation.cxx',
 ]
 
-vcs_rev = vcs_tag(input: 'version.hxx.in', output: 'version.hxx',
-	fallback: meson.project_version())
 inc = include_directories(['.'])
 
-libbdm = library('bdm', [libbdm_files, vcs_rev],
+libbdm = library('bdm', [libbdm_files],
 	dependencies: [boost_dep, g3logger_dep, wiringpi_dep],
 	include_directories: inc,
 	cpp_args: project_warnings,
@@ -30,7 +28,6 @@ libbdmbin_files = [
 	'bdmbin/logger.cxx',
 ]
 libbdmbin = library('bdmbin', libbdmbin_files,
-	sources: vcs_rev,
 	dependencies: [libbdm_dep],
 	cpp_args: project_warnings,
 	include_directories: inc)
